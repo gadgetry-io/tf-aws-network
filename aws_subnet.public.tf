@@ -24,7 +24,7 @@ resource "aws_route_table" "public_subnets" {
 
 # PUBLIC SUBNETS ROUTE TABLE ASSOCIATION
 resource "aws_route_table_association" "public_subnets" {
-  count          = "${length(var.vpc_public_subnets_map)}"
+  count          = "${length(var.vpc_public_subnets)}"
   subnet_id      = "${element(aws_subnet.public.*.id, count.index)}"
   route_table_id = "${aws_route_table.public_subnets.id}"
 }

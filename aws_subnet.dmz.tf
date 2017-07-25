@@ -27,7 +27,7 @@ resource "aws_route_table" "dmz_subnets" {
 
 # DMZ PUBLIC SUBNETS ROUTE TABLE ASSOCIATION
 resource "aws_route_table_association" "dmz_subnets" {
-  count          = "${length(var.vpc_dmz_subnets_map)}"
+  count          = "${length(var.vpc_dmz_subnets)}"
   subnet_id      = "${element(aws_subnet.dmz.*.id, count.index)}"
   route_table_id = "${aws_route_table.dmz_subnets.id}"
   depends_on     = ["aws_subnet.dmz"]

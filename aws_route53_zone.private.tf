@@ -11,28 +11,28 @@ resource "aws_route53_zone" "vpc_private" {
 
 # PROVISION PRIVATE DNS ROUTES USING ROUTE53_SUBNET_SEEDER
 resource "null_resource" "basic_dns" {
-  count = "${length(values(var.vpc_private_subnets_map))}"
+  count = "${length(values(var.vpc_private_subnets))}"
 
   triggers {
-    subnet              = "${element(values(var.vpc_private_subnets_map),count.index)}"
+    subnet              = "${element(values(var.vpc_private_subnets),count.index)}"
     forward_lookup_zone = "${aws_route53_zone.vpc_private.id}"
   }
 
   provisioner "local-exec" {
-    command = "${path.module}/../../files/route53_subnet_seeder -c ${element(values(var.vpc_private_subnets_map),count.index)} -f ${aws_route53_zone.vpc_private.id} -a UPSERT --verbose"
+    command = "${path.module}/../../files/route53_subnet_seeder -c ${element(values(var.vpc_private_subnets),count.index)} -f ${aws_route53_zone.vpc_private.id} -a UPSERT --verbose"
   }
 }
 
 # PROVISION PUBLIC DNS ROUTES USING ROUTE53_SUBNET_SEEDER
 resource "null_resource" "basic_dns_public" {
-  count = "${length(values(var.vpc_public_subnets_map))}"
+  count = "${length(values(var.vpc_public_subnets))}"
 
   triggers {
-    subnet              = "${element(values(var.vpc_public_subnets_map),count.index)}"
+    subnet              = "${element(values(var.vpc_public_subnets),count.index)}"
     forward_lookup_zone = "${aws_route53_zone.vpc_private.id}"
   }
 
   provisioner "local-exec" {
-    command = "${path.module}/../../files/route53_subnet_seeder -c ${element(values(var.vpc_public_subnets_map),count.index)} -f ${aws_route53_zone.vpc_private.id} -a UPSERT --verbose"
+    command = "${path.module}/../../files/route53_subnet_seeder -c ${element(values(var.vpc_public_subnets),count.index)} -f ${aws_route53_zone.vpc_private.id} -a UPSERT --verbose"
   }
 }

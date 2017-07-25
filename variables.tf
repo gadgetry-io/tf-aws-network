@@ -24,6 +24,11 @@ variable "vpc_cidr" {
   default = "10.100.0.0/16"
 }
 
+variable "vpc_dmz_enabled" {
+  type    = "string"
+  default = true
+}
+
 variable "vpc_dmz_subnets" {
   type = "map"
 
